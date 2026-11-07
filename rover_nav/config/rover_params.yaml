@@ -1,0 +1,18 @@
+power_node:
+  ros__parameters:
+    publish_hz: 2.0
+    drain_coeff: 1.1
+
+drive_node:
+  ros__parameters:
+    max_speed: 3.0  
+
+odom_node:
+  ros__parameters:
+    speed_limit: 2.0
+    rover_id: 972
+    odom_hz: 10.0 
+
+navigator_node:
+  ros__parameters:
+    shelter_xy: [4.0, -1.0]
