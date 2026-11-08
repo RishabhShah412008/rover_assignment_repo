@@ -33,7 +33,6 @@ class SquareTestNode(Node):
         self.cmd_pub.publish(cmd)
 
     def execute_square(self):
-        # Wait for odom subscriber to connect
         self.get_logger().info("Waiting for /rover/odom messages...")
         while rclpy.ok() and not self.odom_received:
             rclpy.spin_once(self, timeout_sec=0.1)
@@ -42,19 +41,17 @@ class SquareTestNode(Node):
         start_y = self.current_y
         self.get_logger().info(f"Starting Square Test at initial pose: ({start_x:.3f}, {start_y:.3f})")
 
-        # Command Parameters
-        v_speed = 0.5  # m/s
-        w_speed = 0.5  # rad/s
-        drive_time = 2.0 / v_speed  # 4.0 seconds for 2 meters
-        turn_time = (math.pi / 2.0) / w_speed  # ~3.14 seconds for 90 deg
-
-        # Execute 4 sides of the square
+        v_speed = 0.5 
+        w_speed = 0.5  
+        drive_time = 2.0 / v_speed  
+        turn_time = (math.pi / 2.0) / w_speed 
+        
         for i in range(4):
             self.get_logger().info(f"--- Side {i + 1}/4: Driving Straight ---")
             end_time = time.time() + drive_time
             while time.time() < end_time and rclpy.ok():
                 self.publish_cmd(v_speed, 0.0)
-                rclpy.spin_once(self, timeout_sec=0.05)  # 20 Hz loop
+                rclpy.spin_once(self, timeout_sec=0.05)  
 
             self.get_logger().info(f"--- Side {i + 1}/4: Turning 90 degrees ---")
             end_time = time.time() + turn_time
@@ -67,7 +64,6 @@ class SquareTestNode(Node):
         time.sleep(0.5)
         rclpy.spin_once(self, timeout_sec=0.1)
 
-        # Compute drift from starting position
         dx = self.current_x - start_x
         dy = self.current_y - start_y
         final_drift = math.sqrt(dx*2 + dy*2)
